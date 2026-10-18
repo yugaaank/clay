@@ -1,0 +1,24 @@
+[package]
+name = "{{package_name}}"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.99"
+publish = false
+
+[dependencies]
+gpui-framework = { path = {{framework_path}} }
+
+# This application is independent, including when created inside another workspace.
+[workspace]
+resolver = "2"
+
+# Cargo only applies dependency patches declared at the application workspace root.
+[patch.crates-io]
+async-task = { git = "https://github.com/zed-industries/async-task.git", rev = "015845a19fc31752c02367567d3b8900a406f9da" }
+calloop = { git = "https://github.com/zed-industries/calloop", rev = "3759371fee14c40066d64777e2a36b6ffcc22590" }
+
+[profile.dev]
+debug = 0
+
+[profile.release]
+strip = "symbols"

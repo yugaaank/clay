@@ -1,0 +1,18 @@
+[package]
+name = "gpui-framework-cli"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+description = "Create, develop, and build GPUI Framework applications"
+
+[[bin]]
+name = "gpui-framework"
+path = "src/main.rs"
+doc = false
+
+[dependencies]
+
+[lints]
+workspace = true
