@@ -33,7 +33,7 @@ impl HelpTopic {
                 "GPUI Framework application CLI\n\n\
                  Usage: gpui-framework <COMMAND>\n\n\
                  Commands:\n  \
-                   new <path> [--framework-path <path>]  Create an application and Cargo.lock\n  \
+                   new <path> [--framework-path <path>]  Create an application and Cargo.lock (public Git source by default)\n  \
                    dev [--manifest-path <Cargo.toml>] [-- <app args>]\n    \
                      Run with cargo run --locked\n  \
                    build [--manifest-path <Cargo.toml>]\n    \
@@ -47,8 +47,10 @@ impl HelpTopic {
                  Create a standalone counter application and resolve its Cargo.lock.\n\
                  The destination must not exist. Its final component is the Rust package name\n\
                  (ASCII letters, digits, '-' or '_'; starts with a letter or '_'; no keywords).\n\
-                 The framework defaults to the source checkout used to build this CLI.\n\
-                 Use --framework-path to select another framework crate containing Cargo.toml.\n\
+                 The default dependency is the public Git source at\n\
+                 https://github.com/yugaaank/gpui-framework.git, tag v0.2.0.\n\
+                 That release tag must be published for independent generation.\n\
+                 Use --framework-path for an unreleased local framework crate containing Cargo.toml.\n\
                  Use `new -- <path>` for a path beginning with '-'.\n"
             }
             Self::Dev => {

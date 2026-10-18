@@ -6,7 +6,9 @@ rust-version = "1.99"
 publish = false
 
 [dependencies]
-gpui-framework = { path = {{framework_path}} }
+# `gpui-framework new` selects the public Git release by default. `--framework-path`
+# replaces this with a local path for unreleased framework development.
+gpui-framework = {{framework_dependency}}
 
 # This application is independent, including when created inside another workspace.
 [workspace]

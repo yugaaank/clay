@@ -32,6 +32,13 @@ fn binary_reports_help_version_and_argument_errors() {
     for command in ["new", "dev", "build", "--framework-path", "--manifest-path"] {
         assert!(text(&output.stdout).contains(command));
     }
+    let output = cli()
+        .args(["new", "--help"])
+        .output()
+        .expect("run new help");
+    assert_success(&output);
+    assert!(text(&output.stdout).contains("https://github.com/yugaaank/gpui-framework.git"));
+    assert!(text(&output.stdout).contains("v0.2.0"));
     let output = cli().arg("--version").output().expect("run version");
     assert_success(&output);
     assert!(text(&output.stdout).starts_with("gpui-framework "));
@@ -178,6 +185,20 @@ fn new_resolves_lockfile_and_dev_build_forward_to_direct_cargo_children() {
         PathBuf::from(fs::read_to_string(log.with_extension("cwd")).expect("Cargo cwd")),
         fs::canonicalize(&destination).expect("generated directory")
     );
+
+    let public_destination = temp.path().join("public-app");
+    let output = command()
+        .arg("new")
+        .arg(&public_destination)
+        .output()
+        .expect("generate project with public source");
+    assert_success(&output);
+    let public_manifest =
+        fs::read_to_string(public_destination.join("Cargo.toml")).expect("public-source manifest");
+    assert!(public_manifest.contains(
+        "gpui-framework = { git = \"https://github.com/yugaaank/gpui-framework.git\", tag = \"v0.2.0\" }"
+    ));
+    assert!(!public_manifest.contains("path ="));
 
     let manifest = destination.join("Cargo.toml");
     let literal = "a ; $(touch SHOULD_NOT_EXIST) \\ 雪";

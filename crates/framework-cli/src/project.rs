@@ -8,20 +8,27 @@ const MAIN: &str = include_str!("../../../templates/minimal/src/main.rs");
 const COUNTER: &str = include_str!("../../../templates/minimal/src/counter.rs");
 const GITIGNORE: &str = include_str!("../../../templates/minimal/.gitignore");
 
+pub const PUBLIC_FRAMEWORK_REPOSITORY: &str = "https://github.com/yugaaank/gpui-framework.git";
+/// Release tag placeholder for the next prototype release. Publish/finalize this tag before
+/// relying on the default public-source mode for independent project generation.
+pub const PUBLIC_FRAMEWORK_TAG: &str = "v0.2.0";
+
+#[derive(Debug, PartialEq, Eq)]
+pub enum FrameworkSource {
+    PublicGit,
+    LocalPath(PathBuf),
+}
+
 pub struct GeneratedProject {
     pub directory: PathBuf,
     pub package_name: String,
-}
-
-pub fn default_framework_path() -> PathBuf {
-    Path::new(env!("CARGO_MANIFEST_DIR")).join("../framework")
 }
 
 /// Write only the embedded project files. Lock resolution is a separate child process.
 /// Never remove files on failure: even a partially written destination belongs to the user.
 pub fn write_project(
     destination: &Path,
-    framework_path: &Path,
+    framework_source: FrameworkSource,
 ) -> Result<GeneratedProject, String> {
     match fs::symlink_metadata(destination) {
         Ok(_) => return Err(existing_destination(destination)),
@@ -39,13 +46,10 @@ pub fn write_project(
         .and_then(|name| name.to_str())
         .ok_or_else(|| "destination must end in a valid UTF-8 Rust package name".to_owned())?;
     validate_package_name(name)?;
-    let framework_path = validate_framework_path(framework_path)?;
-    let framework_toml = toml_string(framework_path.to_str().ok_or_else(|| {
-        "framework path must be valid UTF-8 so it can be stored in Cargo.toml".to_owned()
-    })?);
+    let framework_dependency = framework_dependency(framework_source)?;
     let manifest = MANIFEST
         .replace("{{package_name}}", name)
-        .replace("{{framework_path}}", &framework_toml);
+        .replace("{{framework_dependency}}", &framework_dependency);
     let readme = README.replace("{{package_name}}", name);
 
     if let Some(parent) = destination.parent().filter(|p| !p.as_os_str().is_empty()) {
@@ -97,6 +101,23 @@ pub fn write_project(
         directory,
         package_name: name.to_owned(),
     })
+}
+
+fn framework_dependency(source: FrameworkSource) -> Result<String, String> {
+    match source {
+        FrameworkSource::PublicGit => Ok(format!(
+            "{{ git = {}, tag = {} }}",
+            toml_string(PUBLIC_FRAMEWORK_REPOSITORY),
+            toml_string(PUBLIC_FRAMEWORK_TAG),
+        )),
+        FrameworkSource::LocalPath(path) => {
+            let directory = validate_framework_path(&path)?;
+            let path = directory.to_str().ok_or_else(|| {
+                "framework path must be valid UTF-8 so it can be stored in Cargo.toml".to_owned()
+            })?;
+            Ok(format!("{{ path = {} }}", toml_string(path)))
+        }
+    }
 }
 
 fn existing_destination(destination: &Path) -> String {
@@ -251,7 +272,8 @@ mod tests {
         let temp = TempDir::new();
         let framework = framework_in(temp.path());
         let destination = temp.path().join("parent with spaces/my-app");
-        let project = write_project(&destination, &framework).expect("generate files only");
+        let project = write_project(&destination, FrameworkSource::LocalPath(framework.clone()))
+            .expect("generate files only");
         assert_eq!(project.package_name, "my-app");
         assert_eq!(
             project.directory,
@@ -277,6 +299,21 @@ mod tests {
         assert!(readme.contains("gpui-framework build"));
         assert!(readme.contains("cargo generate-lockfile"));
         assert!(!destination.join("Cargo.lock").exists());
+    }
+
+    #[test]
+    fn generates_the_public_git_source_without_a_local_checkout() {
+        let temp = TempDir::new();
+        let destination = temp.path().join("my-app");
+        write_project(&destination, FrameworkSource::PublicGit).expect("generate files only");
+        let manifest = fs::read_to_string(destination.join("Cargo.toml")).expect("manifest");
+        assert!(manifest.contains(&format!(
+            "gpui-framework = {{ git = {}, tag = {} }}",
+            toml_string(PUBLIC_FRAMEWORK_REPOSITORY),
+            toml_string(PUBLIC_FRAMEWORK_TAG),
+        )));
+        assert!(!manifest.contains("{{framework_dependency}}"));
+        assert!(!manifest.contains("path ="));
     }
 
     #[test]
@@ -316,9 +353,12 @@ mod tests {
     fn invalid_name_does_not_create_destination_or_its_parents() {
         let temp = TempDir::new();
         let destination = temp.path().join("new parent/invalid name");
-        let error = write_project(&destination, &framework_in(temp.path()))
-            .err()
-            .expect("invalid name must fail");
+        let error = write_project(
+            &destination,
+            FrameworkSource::LocalPath(framework_in(temp.path())),
+        )
+        .err()
+        .expect("invalid name must fail");
         assert!(error.contains("invalid Rust package name"));
         assert!(!temp.path().join("new parent").exists());
     }
@@ -335,7 +375,7 @@ mod tests {
         fs::create_dir(&populated).expect("populated destination");
         fs::write(populated.join("Cargo.toml"), "keep this manifest").expect("existing manifest");
         for destination in [&empty, &file, &populated] {
-            let error = write_project(destination, &framework)
+            let error = write_project(destination, FrameworkSource::LocalPath(framework.clone()))
                 .err()
                 .expect("existing destinations fail");
             assert!(error.contains("already exists"));
@@ -365,7 +405,7 @@ mod tests {
             let destination = temp.path().join(name);
             symlink(&target, &destination).expect("create destination symlink");
             assert!(
-                write_project(&destination, &framework)
+                write_project(&destination, FrameworkSource::LocalPath(framework.clone()),)
                     .err()
                     .expect("symlink must be rejected")
                     .contains("already exists")
@@ -382,12 +422,30 @@ mod tests {
     fn missing_framework_or_manifest_is_rejected_before_writing() {
         let temp = TempDir::new();
         let destination = temp.path().join("my-app");
-        assert!(write_project(&destination, &temp.path().join("missing")).is_err());
+        assert!(
+            write_project(
+                &destination,
+                FrameworkSource::LocalPath(temp.path().join("missing")),
+            )
+            .is_err()
+        );
         assert!(!destination.exists());
-        assert!(write_project(&destination, temp.path()).is_err());
+        assert!(
+            write_project(
+                &destination,
+                FrameworkSource::LocalPath(temp.path().to_owned()),
+            )
+            .is_err()
+        );
         assert!(!destination.exists());
         let framework = framework_in(temp.path());
-        assert!(write_project(&destination, &framework.join("Cargo.toml")).is_err());
+        assert!(
+            write_project(
+                &destination,
+                FrameworkSource::LocalPath(framework.join("Cargo.toml")),
+            )
+            .is_err()
+        );
         assert!(!destination.exists());
     }
 
@@ -410,7 +468,8 @@ mod tests {
         fs::create_dir(&framework).expect("unusual framework path");
         fs::write(framework.join("Cargo.toml"), "[package]\n").expect("manifest");
         let destination = temp.path().join("my-app");
-        write_project(&destination, &framework).expect("path should be escaped");
+        write_project(&destination, FrameworkSource::LocalPath(framework.clone()))
+            .expect("path should be escaped");
         let manifest = fs::read_to_string(destination.join("Cargo.toml")).expect("manifest");
         assert!(manifest.contains(&toml_string(framework.to_str().expect("UTF-8"))));
         assert!(manifest.contains("{{package_name}}")); // Literal path data, not a template slot.
@@ -431,7 +490,7 @@ mod tests {
         fs::write(framework.join("Cargo.toml"), "[package]\n").expect("manifest");
         let destination = temp.path().join("my-app");
         assert!(
-            write_project(&destination, &framework)
+            write_project(&destination, FrameworkSource::LocalPath(framework))
                 .err()
                 .expect("TOML cannot represent a non-UTF-8 path")
                 .contains("must be valid UTF-8")

@@ -33,8 +33,9 @@ fn execute(action: Action) -> Result<ExitCode, String> {
             path,
             framework_path,
         } => {
-            let framework = framework_path.unwrap_or_else(project::default_framework_path);
-            let project = project::write_project(&path, &framework)?;
+            let framework = framework_path.map(project::FrameworkSource::LocalPath);
+            let source = framework.unwrap_or(project::FrameworkSource::PublicGit);
+            let project = project::write_project(&path, source)?;
             let mut command = cargo::lockfile_command(&project.directory);
             let retry = || {
                 format!(

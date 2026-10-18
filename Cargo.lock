@@ -1935,7 +1935,7 @@ dependencies = [
 
 [[package]]
 name = "gpui-framework"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "gpui",
  "gpui_platform",
@@ -1947,7 +1947,7 @@ dependencies = [
 
 [[package]]
 name = "gpui-framework-cli"
-version = "0.1.0"
+version = "0.2.0"
 
 [[package]]
 name = "gpui_apple"
@@ -4982,6 +4982,14 @@ dependencies = [
  "ntapi",
  "rayon",
  "windows 0.57.0",
+]
+
+[[package]]
+name = "system-monitor"
+version = "0.1.0"
+dependencies = [
+ "gpui-framework",
+ "sysinfo",
 ]
 
 [[package]]

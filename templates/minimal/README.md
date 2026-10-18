@@ -7,8 +7,28 @@ and application root. UI-independent state and its tests live in `src/counter.rs
 ## Develop and build
 
 Use Rust 1.99 or newer and install the native platform dependencies required by
-GPUI. Keep the local framework source checkout available at the absolute path in
-`Cargo.toml` (update that dependency path if you move the checkout).
+GPUI. For independent project generation, install the CLI from the published
+framework release:
+
+```sh
+cargo install --git https://github.com/yugaaank/gpui-framework.git --tag v0.2.0 --bin gpui-framework
+gpui-framework new ./my-app
+```
+
+By default, the generated `Cargo.toml` uses the public Git source at tag
+`v0.2.0`, so the tag must be published before this flow can resolve
+dependencies. The tag is the Phase 1 release placeholder and may be finalized
+by the project maintainer.
+
+For unreleased local framework development, generate with an explicit local
+override instead:
+
+```sh
+gpui-framework new ./my-app --framework-path /path/to/gpui-framework/crates/framework
+```
+
+That mode records the canonical local path in `Cargo.toml` and is only intended
+for development against an unpublished checkout.
 
 Run these commands from this application's directory:
 
@@ -38,7 +58,8 @@ The minimal counter does not interpret arguments yet.
 `gpui-framework new` automatically runs `cargo generate-lockfile`. Commit the
 resulting `Cargo.lock` with your application; development and release builds use
 it without updating dependencies. First-time resolution needs access to the
-configured registries and upstream Git repositories.
+configured registries and the public framework Git tag (or the local framework
+checkout when `--framework-path` was used).
 
 If resolution failed during creation, all generated files are retained. Fix the
 reported Cargo error, then retry from this directory:

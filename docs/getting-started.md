@@ -31,7 +31,23 @@ The example demonstrates:
 - JSON settings loaded and saved on a background executor
 - native file selection and confirmation dialogs
 
-The settings file is written to `XDG_CONFIG_HOME/gpui-framework-example` on
+## Run the system monitor
+
+The system-monitor example exercises the same public API with a real background
+workload:
+
+```sh
+cargo run --locked -p system-monitor
+```
+
+It refreshes CPU, memory, uptime, and process metrics once per second without
+blocking render. The collector keeps the newest 60 history samples and 50
+process rows, sorts processes deterministically, and the UI has loading, error,
+and empty states. The collector tests cover those bounds without requiring a
+windowing session.
+
+The settings example writes its settings file to
+`XDG_CONFIG_HOME/gpui-framework-example` on
 Linux, or the platform's application configuration directory.
 
 ## Generate an app
@@ -43,17 +59,30 @@ cargo build --locked -p gpui-framework-cli
 ```
 
 Generate a project. The generated project is standalone and refuses to reuse an
-existing path:
+existing path. When working from this unreleased checkout, use the explicit local
+framework override:
 
 ```sh
-./target/debug/gpui-framework new ./my-app
+./target/debug/gpui-framework new ./my-app --framework-path "$PWD/crates/framework"
 cd my-app
 ../target/debug/gpui-framework dev
 ../target/debug/gpui-framework build
 ```
 
-The generated `Cargo.toml` points at this checkout's framework crate. For a
-different checkout:
+For independent generation, install the CLI from the published public release
+and omit `--framework-path`:
+
+```sh
+cargo install --git https://github.com/yugaaank/gpui-framework.git --tag v0.2.0 --bin gpui-framework
+gpui-framework new ./my-app
+```
+
+The default generated `Cargo.toml` uses
+`https://github.com/yugaaank/gpui-framework.git` at tag `v0.2.0`. That tag is
+the Phase 1 release placeholder and must be published/finalized for independent
+generation to resolve. The local path mode is only for unreleased development.
+
+For a different local checkout:
 
 ```sh
 gpui-framework new ./my-app --framework-path /path/to/gpui-framework/crates/framework
@@ -122,4 +151,6 @@ cargo build --workspace --release --locked
   not perform synchronous I/O in render.
 - No hot reload, packaging, updater, plugin system, TypeScript runtime, or visual
   editor is included.
+- The system-monitor process view is intentionally capped at 50 rows and its
+  CPU reading settles after the first refresh because it is delta-based.
 - The GPUI dependency is pre-1.0 and must be upgraded deliberately.

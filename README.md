@@ -18,7 +18,8 @@ be advertised.
 - Native file selection and confirmation dialogs where the host platform provides
   them.
 - A CLI with `new`, `dev`, and `build`.
-- A complete settings example and a generated counter template.
+- A complete settings example, a live system-monitor example, and a generated
+  counter template.
 
 ## Quick start
 
@@ -30,18 +31,42 @@ GPUI and platform dependencies.
 cargo run --locked -p settings-app
 ```
 
+Run the system-monitor example:
+
+```sh
+cargo run --locked -p system-monitor
+```
+
+It collects CPU, memory, uptime, and process data off the render path, keeps a
+bounded 60-sample history and 50-process view, and displays explicit loading,
+error, and empty states.
+
 Build the CLI and create an app:
 
 ```sh
 cargo build --locked -p gpui-framework-cli
-./target/debug/gpui-framework new ./my-app
+./target/debug/gpui-framework new ./my-app --framework-path "$PWD/crates/framework"
 cd my-app
 ../target/debug/gpui-framework dev
 ../target/debug/gpui-framework build
 ```
 
-The generated app uses the framework checkout as a path dependency and contains
-its own Cargo workspace and lockfile. It refuses to overwrite an existing path.
+The `--framework-path` form is for unreleased development against this checkout.
+The generated app contains its own Cargo workspace and lockfile, and the CLI
+refuses to overwrite an existing path.
+
+For independent generation from the public release, install the CLI from the
+published tag and omit `--framework-path`:
+
+```sh
+cargo install --git https://github.com/yugaaank/gpui-framework.git --tag v0.2.0 --bin gpui-framework
+gpui-framework new ./my-app
+```
+
+The default generated dependency is the public Git source at tag `v0.2.0`.
+That tag is the Phase 1 release placeholder and must be published/finalized
+before independent generation can resolve it; local paths are only for
+unreleased development.
 
 Full setup, API examples, platform notes, and limitations are in
 [`docs/getting-started.md`](docs/getting-started.md).
@@ -52,6 +77,7 @@ Full setup, API examples, platform notes, and limitations are in
 crates/framework/       public facade and components
 crates/framework-cli/   project generation and Cargo commands
 examples/settings-app/  persisted settings example
+examples/system-monitor/ bounded live metrics and process example
 templates/minimal/      generated counter project
 docs/getting-started.md setup and API guide
 ```
@@ -71,9 +97,9 @@ cargo doc --workspace --no-deps --locked
 cargo build --workspace --release --locked
 ```
 
-The verified Linux run includes 18 framework tests, 21 CLI/example tests, 2
-doctests, a release build, a native settings window, and a generated app build
-and launch. The workspace was tested against GPUI revision
+The verified Linux run includes 18 framework tests, 28 CLI/example tests, 2
+doctests, a release build, a native settings window, and a system-monitor build.
+The workspace was tested against GPUI revision
 `56934ec0560bce8929025497411de7f5322fb6ca`.
 
 ## License

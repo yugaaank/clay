@@ -1,7 +1,17 @@
 [workspace]
 resolver = "2"
-members = ["crates/framework", "crates/framework-cli", "examples/settings-app"]
-default-members = ["crates/framework", "crates/framework-cli", "examples/settings-app"]
+members = [
+    "crates/framework",
+    "crates/framework-cli",
+    "examples/settings-app",
+    "examples/system-monitor",
+]
+default-members = [
+    "crates/framework",
+    "crates/framework-cli",
+    "examples/settings-app",
+    "examples/system-monitor",
+]
 
 [workspace.package]
 edition = "2024"
