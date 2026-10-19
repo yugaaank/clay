@@ -1,6 +1,8 @@
 <p align="center">
-  <h1 align="center">Clay</h1>
+  <img src="logo.svg" alt="Clay logo" width="180" />
 </p>
+
+<h1 align="center">Clay</h1>
 
 <p align="center">
   <a href="https://github.com/yugaaank/clay/actions/workflows/check.yml">
