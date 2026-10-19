@@ -8,8 +8,8 @@ const MAIN: &str = include_str!("../../../templates/minimal/src/main.rs");
 const COUNTER: &str = include_str!("../../../templates/minimal/src/counter.rs");
 const GITIGNORE: &str = include_str!("../../../templates/minimal/.gitignore");
 
-pub const PUBLIC_FRAMEWORK_REPOSITORY: &str = "https://github.com/yugaaank/gpui-framework.git";
-pub const PUBLIC_FRAMEWORK_TAG: &str = "v0.2.1";
+pub const PUBLIC_CLAY_REPOSITORY: &str = "https://github.com/yugaaank/clay.git";
+pub const PUBLIC_CLAY_TAG: &str = "v0.3.0";
 
 #[derive(Debug, PartialEq, Eq)]
 pub enum FrameworkSource {
@@ -105,8 +105,8 @@ fn framework_dependency(source: FrameworkSource) -> Result<String, String> {
     match source {
         FrameworkSource::PublicGit => Ok(format!(
             "{{ git = {}, tag = {} }}",
-            toml_string(PUBLIC_FRAMEWORK_REPOSITORY),
-            toml_string(PUBLIC_FRAMEWORK_TAG),
+            toml_string(PUBLIC_CLAY_REPOSITORY),
+            toml_string(PUBLIC_CLAY_TAG),
         )),
         FrameworkSource::LocalPath(path) => {
             let directory = validate_framework_path(&path)?;
@@ -259,7 +259,7 @@ mod tests {
         fs::create_dir(&framework).expect("create stub framework");
         fs::write(
             framework.join("Cargo.toml"),
-            "[package]\nname = \"gpui-framework\"\nversion = \"0.1.0\"\n",
+            "[package]\nname = \"clay\"\nversion = \"0.1.0\"\n",
         )
         .expect("write stub manifest");
         framework
@@ -281,7 +281,7 @@ mod tests {
         assert!(manifest.contains("name = \"my-app\""));
         assert!(manifest.contains("[workspace]\nresolver = \"2\""));
         assert!(manifest.contains(&format!(
-            "gpui-framework = {{ path = {} }}",
+            "clay = {{ path = {} }}",
             toml_string(framework.to_str().expect("UTF-8 test path"))
         )));
         assert!(manifest.contains("[patch.crates-io]"));
@@ -293,8 +293,8 @@ mod tests {
         }
         let readme = fs::read_to_string(destination.join("README.md")).expect("README");
         assert!(readme.starts_with("# my-app\n"));
-        assert!(readme.contains("gpui-framework dev"));
-        assert!(readme.contains("gpui-framework build"));
+        assert!(readme.contains("clay dev"));
+        assert!(readme.contains("clay build"));
         assert!(readme.contains("cargo generate-lockfile"));
         assert!(!destination.join("Cargo.lock").exists());
     }
@@ -306,9 +306,9 @@ mod tests {
         write_project(&destination, FrameworkSource::PublicGit).expect("generate files only");
         let manifest = fs::read_to_string(destination.join("Cargo.toml")).expect("manifest");
         assert!(manifest.contains(&format!(
-            "gpui-framework = {{ git = {}, tag = {} }}",
-            toml_string(PUBLIC_FRAMEWORK_REPOSITORY),
-            toml_string(PUBLIC_FRAMEWORK_TAG),
+            "clay = {{ git = {}, tag = {} }}",
+            toml_string(PUBLIC_CLAY_REPOSITORY),
+            toml_string(PUBLIC_CLAY_TAG),
         )));
         assert!(!manifest.contains("{{framework_dependency}}"));
         assert!(!manifest.contains("path ="));

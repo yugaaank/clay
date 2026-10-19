@@ -86,7 +86,7 @@ type Change = Rc<dyn Fn(&bool, &mut Window, &mut App)>;
 /// A focusable, keyboard-activatable button with a stable ID.
 ///
 /// ```no_run
-/// use gpui_framework::Button;
+/// use clay::Button;
 /// let button = Button::new("save", "Save").on_click(|_, _, _| {});
 /// ```
 #[derive(IntoElement)]

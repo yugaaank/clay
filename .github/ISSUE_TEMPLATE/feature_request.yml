@@ -1,0 +1,58 @@
+name: Feature request
+description: Propose a focused improvement or new capability
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Start with the user problem. Large architectural proposals should be discussed before implementation.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+      description: Who is blocked, and what are they trying to accomplish?
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Expected behavior
+      description: Describe the smallest useful user-visible result.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives and workarounds
+      description: Explain current APIs, raw GPUI workarounds, or competing approaches.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Likely area
+      options:
+        - Framework core
+        - CLI or templates
+        - Documentation
+        - Testing or CI
+        - Cross-platform support
+        - Unsure
+    validations:
+      required: true
+  - type: checkboxes
+    id: api
+    attributes:
+      label: Compatibility considerations
+      options:
+        - label: This may change the public Rust API.
+        - label: This may add or change a dependency.
+        - label: This needs native validation on Windows or macOS.
+        - label: This is only a documentation or example change.
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: List behavior that can be tested or demonstrated.
+    validations:
+      required: true

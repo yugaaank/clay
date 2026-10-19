@@ -30,8 +30,8 @@ impl HelpTopic {
     pub fn text(self) -> &'static str {
         match self {
             Self::Main => {
-                "GPUI Framework application CLI\n\n\
-                 Usage: gpui-framework <COMMAND>\n\n\
+                "Clay application CLI\n\n\
+                 Usage: clay <COMMAND>\n\n\
                  Commands:\n  \
                    new <path> [--framework-path <path>]  Create an application and Cargo.lock (public Git source by default)\n  \
                    dev [--manifest-path <Cargo.toml>] [-- <app args>]\n    \
@@ -43,23 +43,23 @@ impl HelpTopic {
                    -V, --version  Print version\n"
             }
             Self::New => {
-                "Usage: gpui-framework new <path> [--framework-path <path>]\n\n\
+                "Usage: clay new <path> [--framework-path <path>]\n\n\
                  Create a standalone counter application and resolve its Cargo.lock.\n\
                  The destination must not exist. Its final component is the Rust package name\n\
                  (ASCII letters, digits, '-' or '_'; starts with a letter or '_'; no keywords).\n\
                  The default dependency is the public Git source at\n\
-                 https://github.com/yugaaank/gpui-framework.git, tag v0.2.1.\n\
+                 https://github.com/yugaaank/clay.git, tag v0.3.0.\n\
                  That release tag must be published for independent generation.\n\
                  Use --framework-path for an unreleased local framework crate containing Cargo.toml.\n\
                  Use `new -- <path>` for a path beginning with '-'.\n"
             }
             Self::Dev => {
-                "Usage: gpui-framework dev [--manifest-path <Cargo.toml>] [-- <app args>]\n\n\
+                "Usage: clay dev [--manifest-path <Cargo.toml>] [-- <app args>]\n\n\
                  Runs cargo run --locked. Arguments after -- are passed to the application.\n\
                  Without --manifest-path, Cargo finds the manifest from the current directory.\n"
             }
             Self::Build => {
-                "Usage: gpui-framework build [--manifest-path <Cargo.toml>]\n\n\
+                "Usage: clay build [--manifest-path <Cargo.toml>]\n\n\
                  Runs cargo build --release --locked.\n\
                  Without --manifest-path, Cargo finds the manifest from the current directory.\n"
             }
@@ -85,7 +85,7 @@ pub fn parse(arguments: impl IntoIterator<Item = OsString>) -> Result<Action, St
         Some("dev") => parse_cargo(args, true),
         Some("build") => parse_cargo(args, false),
         _ => Err(format!(
-            "unknown command `{}`; use `gpui-framework --help`",
+            "unknown command `{}`; use `clay --help`",
             command.to_string_lossy()
         )),
     }
@@ -142,9 +142,7 @@ fn parse_new(mut args: impl Iterator<Item = OsString>) -> Result<Action, String>
     }
     let path = path
         .filter(|path| !path.as_os_str().is_empty())
-        .ok_or_else(|| {
-            "new requires a destination path; use `gpui-framework new --help`".to_owned()
-        })?;
+        .ok_or_else(|| "new requires a destination path; use `clay new --help`".to_owned())?;
     Ok(Action::New {
         path,
         framework_path,
@@ -172,7 +170,7 @@ fn parse_cargo(mut args: impl Iterator<Item = OsString>, dev: bool) -> Result<Ac
             }
             _ => {
                 return Err(format!(
-                    "unexpected {} argument `{}`; use `gpui-framework {} --help`",
+                    "unexpected {} argument `{}`; use `clay {} --help`",
                     if dev { "dev" } else { "build" },
                     arg.to_string_lossy(),
                     if dev { "dev" } else { "build" },
@@ -218,22 +216,22 @@ mod tests {
     fn new_accepts_paths_as_single_arguments_and_options_in_either_order() {
         let expected = Action::New {
             path: "parent with spaces/my-app".into(),
-            framework_path: Some("framework checkout/crates/framework".into()),
+            framework_path: Some("clay checkout/crates/clay".into()),
         };
         assert_eq!(
             parsed(&[
                 "new",
                 "parent with spaces/my-app",
                 "--framework-path",
-                "framework checkout/crates/framework",
+                "clay checkout/crates/clay",
             ]),
             Ok(expected)
         );
         assert_eq!(
-            parsed(&["new", "--framework-path", "../framework", "my-app"]),
+            parsed(&["new", "--framework-path", "../clay", "my-app"]),
             Ok(Action::New {
                 path: "my-app".into(),
-                framework_path: Some("../framework".into()),
+                framework_path: Some("../clay".into()),
             })
         );
         assert_eq!(

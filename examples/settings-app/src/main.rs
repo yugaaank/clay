@@ -1,5 +1,5 @@
-use gpui_framework::prelude::*;
-use gpui_framework::raw::{KeyBinding, SharedString};
+use clay::prelude::*;
+use clay::raw::{KeyBinding, SharedString};
 use serde::{Deserialize, Serialize};
 
 actions!(settings_app, [SaveSettings, OpenFolderFile]);
@@ -37,7 +37,7 @@ struct SettingsApp {
 
 impl SettingsApp {
     fn new(window: &mut UiWindow, cx: &mut Context<Self>) -> Self {
-        let store = SettingsStore::new("gpui-framework-example");
+        let store = SettingsStore::new("clay-example");
         Self::with_store(store, window, cx)
     }
 
@@ -235,7 +235,7 @@ impl Render for SettingsApp {
                     .bg(theme.colors.surface)
                     .border_r_1()
                     .border_color(theme.colors.border)
-                    .child(Text::new("GPUI Framework").heading())
+                    .child(Text::new("Clay").heading())
                     .child(Text::new("Settings example").muted())
                     .child(Text::new("General"))
                     .child(
@@ -244,7 +244,7 @@ impl Render for SettingsApp {
                     ),
             )
             .child(
-                gpui_framework::raw::div()
+                clay::raw::div()
                     .id("settings-content")
                     .key_context("SettingsApp")
                     .flex_1()

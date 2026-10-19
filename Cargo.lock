@@ -775,6 +775,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "clay"
+version = "0.3.0"
+dependencies = [
+ "gpui",
+ "gpui_platform",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "unicode-segmentation",
+]
+
+[[package]]
+name = "clay-cli"
+version = "0.3.0"
+
+[[package]]
 name = "cocoa"
 version = "0.25.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1932,22 +1948,6 @@ dependencies = [
  "windows 0.62.2",
  "zed-scap",
 ]
-
-[[package]]
-name = "gpui-framework"
-version = "0.2.1"
-dependencies = [
- "gpui",
- "gpui_platform",
- "serde",
- "serde_json",
- "tempfile",
- "unicode-segmentation",
-]
-
-[[package]]
-name = "gpui-framework-cli"
-version = "0.2.1"
 
 [[package]]
 name = "gpui_apple"
@@ -4674,7 +4674,7 @@ dependencies = [
 name = "settings-app"
 version = "0.1.0"
 dependencies = [
- "gpui-framework",
+ "clay",
  "serde",
  "tempfile",
 ]
@@ -4988,7 +4988,7 @@ dependencies = [
 name = "system-monitor"
 version = "0.1.0"
 dependencies = [
- "gpui-framework",
+ "clay",
  "sysinfo",
 ]
 

@@ -18,7 +18,7 @@ pub enum InputEvent {
 }
 
 actions!(
-    framework_input,
+    clay_input,
     [
         Backspace,
         Delete,
@@ -46,7 +46,7 @@ fn init_bindings(cx: &mut App) {
         return;
     }
     cx.set_global(InputBindings);
-    let context = Some("FrameworkTextInput");
+    let context = Some("ClayTextInput");
     cx.bind_keys([
         KeyBinding::new("backspace", Backspace, context),
         KeyBinding::new("delete", Delete, context),
@@ -863,8 +863,8 @@ impl Render for TextInput {
         };
         let field =
             div()
-                .id(("framework-text-input", cx.entity_id()))
-                .accessibility_id(format!("framework-text-input-{}", cx.entity_id().as_u64()))
+                .id(("clay-text-input", cx.entity_id()))
+                .accessibility_id(format!("clay-text-input-{}", cx.entity_id().as_u64()))
                 .role(Role::TextInput)
                 .aria_label(accessible_name)
                 .aria_value(self.content.clone())
@@ -902,7 +902,7 @@ impl Render for TextInput {
                 .on_mouse_down(MouseButton::Left, cx.listener(Self::on_mouse_down))
                 .when(!disabled, |field| {
                     field
-                        .key_context("FrameworkTextInput")
+                        .key_context("ClayTextInput")
                         .on_action(cx.listener(|input, _: &Backspace, window, cx| {
                             input.delete(true, window, cx)
                         }))

@@ -1,14 +1,14 @@
 [workspace]
 resolver = "2"
 members = [
-    "crates/framework",
-    "crates/framework-cli",
+    "crates/clay",
+    "crates/clay-cli",
     "examples/settings-app",
     "examples/system-monitor",
 ]
 default-members = [
-    "crates/framework",
-    "crates/framework-cli",
+    "crates/clay",
+    "crates/clay-cli",
     "examples/settings-app",
     "examples/system-monitor",
 ]

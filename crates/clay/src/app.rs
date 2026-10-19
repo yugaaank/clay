@@ -5,22 +5,22 @@ use gpui::{
 };
 use std::sync::{Arc, Mutex};
 
-actions!(framework, [FocusNext, FocusPrevious, CloseWindow]);
+actions!(clay, [FocusNext, FocusPrevious, CloseWindow]);
 
 fn init_keys(cx: &mut gpui::App) {
     for key in ["ctrl-w", "cmd-w"] {
-        cx.bind_keys([KeyBinding::new(key, CloseWindow, Some("FrameworkRoot"))]);
+        cx.bind_keys([KeyBinding::new(key, CloseWindow, Some("ClayRoot"))]);
     }
     cx.bind_keys([
-        KeyBinding::new("tab", FocusNext, Some("FrameworkRoot")),
-        KeyBinding::new("shift-tab", FocusPrevious, Some("FrameworkRoot")),
+        KeyBinding::new("tab", FocusNext, Some("ClayRoot")),
+        KeyBinding::new("shift-tab", FocusPrevious, Some("ClayRoot")),
     ]);
 }
 
 /// Window configuration in logical pixels.
 ///
 /// ```
-/// use gpui_framework::Window;
+/// use clay::Window;
 /// let window = Window::new("Notes").size(900., 600.);
 /// ```
 pub struct Window {
@@ -96,7 +96,7 @@ impl App {
                         title: Some(config.title.clone().into()),
                         ..Default::default()
                     }),
-                    app_id: Some("gpui-framework".into()),
+                    app_id: Some("clay".into()),
                     ..Default::default()
                 },
                 |window, cx| {
@@ -160,7 +160,7 @@ impl<V: Render + 'static> Render for Root<V> {
         let theme = Theme::get(cx);
         div()
             .size_full()
-            .key_context("FrameworkRoot")
+            .key_context("ClayRoot")
             .track_focus(&self.focus)
             .bg(theme.colors.background)
             .text_color(theme.colors.text)

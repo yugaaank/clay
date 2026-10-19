@@ -1,5 +1,5 @@
 use super::*;
-use gpui_framework::raw::{TestAppContext, VisualTestContext};
+use clay::raw::{TestAppContext, VisualTestContext};
 
 fn setup(
     cx: &mut TestAppContext,
@@ -17,7 +17,7 @@ fn click(cx: &mut VisualTestContext, label: &'static str) {
     cx.simulate_click(bounds.center(), Default::default());
 }
 
-#[gpui_framework::raw::test]
+#[clay::raw::test]
 fn form_saves_reloads_and_changes_theme(cx: &mut TestAppContext) {
     let directory = tempfile::tempdir().expect("test directory");
     let store = SettingsStore::from_path(directory.path().join("preferences.json"));
@@ -50,7 +50,7 @@ fn form_saves_reloads_and_changes_theme(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui_framework::raw::test]
+#[clay::raw::test]
 fn clipboard_dialogs_and_confirmation(cx: &mut TestAppContext) {
     let directory = tempfile::tempdir().expect("test directory");
     let (view, cx) = setup(
@@ -64,9 +64,7 @@ fn clipboard_dialogs_and_confirmation(cx: &mut TestAppContext) {
             .as_deref(),
         Some("Developer")
     );
-    cx.write_to_clipboard(gpui_framework::raw::ClipboardItem::new_string(
-        "Pasted name".into(),
-    ));
+    cx.write_to_clipboard(clay::raw::ClipboardItem::new_string("Pasted name".into()));
     click(cx, "Paste name");
     cx.run_until_parked();
     view.read_with(cx, |view, _| {

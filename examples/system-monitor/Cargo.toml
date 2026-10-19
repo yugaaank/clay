@@ -7,7 +7,7 @@ license.workspace = true
 publish.workspace = true
 
 [dependencies]
-gpui-framework = { path = "../../crates/framework" }
+clay = { path = "../../crates/clay" }
 sysinfo = "0.31.4"
 
 [lints]

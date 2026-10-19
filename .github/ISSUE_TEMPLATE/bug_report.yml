@@ -1,0 +1,66 @@
+name: Bug report
+description: Report reproducible broken behavior in Clay
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please search existing issues first. Do not include credentials or private data.
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened?
+      description: Describe the observed behavior and include the full error when relevant.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Include commands, a minimal project, and the smallest reliable trigger.
+      placeholder: |
+        1. Run ...
+        2. Open ...
+        3. Click ...
+    validations:
+      required: true
+  - type: dropdown
+    id: source
+    attributes:
+      label: Where does it happen?
+      options:
+        - Generated application
+        - Framework workspace
+        - settings-app example
+        - system-monitor example
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: Operating system
+      placeholder: "Linux distribution and version"
+    validations:
+      required: true
+  - type: input
+    id: rust
+    attributes:
+      label: Rust version
+      description: Paste the output of `rustc --version --verbose`.
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs and additional context
+      description: Remove secrets and private paths before posting.
+      render: shell

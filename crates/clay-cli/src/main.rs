@@ -26,7 +26,7 @@ fn execute(action: Action) -> Result<ExitCode, String> {
             Ok(ExitCode::SUCCESS)
         }
         Action::Version => {
-            println!("gpui-framework {}", env!("CARGO_PKG_VERSION"));
+            println!("clay {}", env!("CARGO_PKG_VERSION"));
             Ok(ExitCode::SUCCESS)
         }
         Action::New {
@@ -59,7 +59,7 @@ fn execute(action: Action) -> Result<ExitCode, String> {
             }
             println!(
                 "Created `{}` at {}.\n\
-                 From that directory, run `gpui-framework dev` or `gpui-framework build`.",
+                 From that directory, run `clay dev` or `clay build`.",
                 project.package_name,
                 project.directory.display()
             );

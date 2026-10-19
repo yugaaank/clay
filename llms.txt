@@ -1,0 +1,32 @@
+# Clay documentation index
+
+Clay is a Rust application layer over GPUI. Linux is the only runtime-verified
+platform. Clay package version: 0.3.0.
+
+## For application-building agents
+
+- [AI guide index](docs/ai/README.md)
+- [Application setup](docs/ai/getting-started.md)
+- [Public API reference](docs/ai/api-reference.md)
+- [Components and layout](docs/ai/component-guide.md)
+- [State, events, and tasks](docs/ai/state-and-events.md)
+- [Native services](docs/ai/native-services.md)
+- [Recipes](docs/ai/recipes.md)
+- [Troubleshooting](docs/ai/troubleshooting.md)
+- [Limitations](docs/ai/limitations.md)
+
+## Compilable reference applications
+
+- [Settings application](examples/settings-app/)
+- [System monitor](examples/system-monitor/)
+- [Minimal project template](templates/minimal/)
+
+## For framework contributors
+
+- [Canonical agent instructions](AGENTS.md)
+- [Human contribution guide](CONTRIBUTING.md)
+- [Getting started](docs/getting-started.md)
+- [Repository README](README.md)
+
+If an example and this index disagree with the installed crate, inspect the
+installed source and lockfile for the actual version before using an API.

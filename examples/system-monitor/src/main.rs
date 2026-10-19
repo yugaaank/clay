@@ -2,9 +2,9 @@ mod collector;
 
 use std::time::Duration;
 
+use clay::prelude::*;
+use clay::raw::{self, Hsla};
 use collector::{MetricPoint, ProcessSample, SystemCollector, SystemSnapshot};
-use gpui_framework::prelude::*;
-use gpui_framework::raw::{self, Hsla};
 
 const REFRESH_INTERVAL: Duration = Duration::from_secs(1);
 

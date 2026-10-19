@@ -8,7 +8,7 @@ use std::process::{Command, Output};
 use test_support::TempDir;
 
 fn cli() -> Command {
-    Command::new(env!("CARGO_BIN_EXE_gpui-framework"))
+    Command::new(env!("CARGO_BIN_EXE_clay"))
 }
 
 fn text(bytes: &[u8]) -> String {
@@ -37,11 +37,11 @@ fn binary_reports_help_version_and_argument_errors() {
         .output()
         .expect("run new help");
     assert_success(&output);
-    assert!(text(&output.stdout).contains("https://github.com/yugaaank/gpui-framework.git"));
-    assert!(text(&output.stdout).contains("v0.2.1"));
+    assert!(text(&output.stdout).contains("https://github.com/yugaaank/clay.git"));
+    assert!(text(&output.stdout).contains("v0.3.0"));
     let output = cli().arg("--version").output().expect("run version");
     assert_success(&output);
-    assert!(text(&output.stdout).starts_with("gpui-framework "));
+    assert!(text(&output.stdout).starts_with("clay "));
     for args in [vec!["not-a-command"], vec!["new"], vec!["build", "--oops"]] {
         let output = cli().args(&args).output().expect("run invalid command");
         assert!(!output.status.success(), "invalid arguments: {args:?}");
@@ -54,7 +54,7 @@ fn stub_framework(parent: &Path) -> PathBuf {
     fs::create_dir(&framework).expect("create stub framework");
     fs::write(
         framework.join("Cargo.toml"),
-        "[package]\nname = \"gpui-framework\"\nversion = \"0.1.0\"\n",
+        "[package]\nname = \"clay\"\nversion = \"0.1.0\"\n",
     )
     .expect("stub manifest");
     framework
@@ -195,9 +195,11 @@ fn new_resolves_lockfile_and_dev_build_forward_to_direct_cargo_children() {
     assert_success(&output);
     let public_manifest =
         fs::read_to_string(public_destination.join("Cargo.toml")).expect("public-source manifest");
-    assert!(public_manifest.contains(
-        "gpui-framework = { git = \"https://github.com/yugaaank/gpui-framework.git\", tag = \"v0.2.1\" }"
-    ));
+    assert!(
+        public_manifest.contains(
+            "clay = { git = \"https://github.com/yugaaank/clay.git\", tag = \"v0.3.0\" }"
+        )
+    );
     assert!(!public_manifest.contains("path ="));
 
     let manifest = destination.join("Cargo.toml");

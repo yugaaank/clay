@@ -1,6 +1,6 @@
 # {{package_name}}
 
-A small GPUI Framework counter application. Click **Increment** to update the
+A small Clay counter application. Click **Increment** to update the
 count; use Tab to move keyboard focus. The framework supplies the theme, fonts,
 and application root. UI-independent state and its tests live in `src/counter.rs`.
 
@@ -12,22 +12,22 @@ framework release:
 
 ```sh
 cargo install --locked \
-  --git https://github.com/yugaaank/gpui-framework.git \
-  --tag v0.2.1 \
-  gpui-framework-cli \
-  --bin gpui-framework
-gpui-framework new ./my-app
+  --git https://github.com/yugaaank/clay.git \
+  --tag v0.3.0 \
+  clay-cli \
+  --bin clay
+clay new ./my-app
 ```
 
 By default, the generated `Cargo.toml` uses the public Git source at tag
-`v0.2.1`, so the tag must be published before this flow can resolve
-dependencies. This is the maintenance release for the public Git workflow.
+`v0.3.0`, so the tag must be published before this flow can resolve
+dependencies. This is the first Clay release after the project rename.
 
 For unreleased local framework development, generate with an explicit local
 override instead:
 
 ```sh
-gpui-framework new ./my-app --framework-path /path/to/gpui-framework/crates/framework
+clay new ./my-app --framework-path /path/to/clay/crates/clay
 ```
 
 That mode records the canonical local path in `Cargo.toml` and is only intended
@@ -36,8 +36,8 @@ for development against an unpublished checkout.
 Run these commands from this application's directory:
 
 ```sh
-gpui-framework dev
-gpui-framework build
+clay dev
+clay build
 cargo test --locked
 ```
 
@@ -49,16 +49,16 @@ From another directory, pass the manifest as a single argument (quote paths
 containing spaces):
 
 ```sh
-gpui-framework dev --manifest-path "/path to app/Cargo.toml"
-gpui-framework build --manifest-path "/path to app/Cargo.toml"
+clay dev --manifest-path "/path to app/Cargo.toml"
+clay build --manifest-path "/path to app/Cargo.toml"
 ```
 
-Application arguments go after `--`, for example `gpui-framework dev -- --help`.
+Application arguments go after `--`, for example `clay dev -- --help`.
 The minimal counter does not interpret arguments yet.
 
 ## Lockfile and dependencies
 
-`gpui-framework new` automatically runs `cargo generate-lockfile`. Commit the
+`clay new` automatically runs `cargo generate-lockfile`. Commit the
 resulting `Cargo.lock` with your application; development and release builds use
 it without updating dependencies. First-time resolution needs access to the
 configured registries and the public framework Git tag (or the local framework
@@ -69,7 +69,7 @@ reported Cargo error, then retry from this directory:
 
 ```sh
 cargo generate-lockfile
-gpui-framework dev
+clay dev
 ```
 
 The root `[workspace]` keeps this application independent of any enclosing

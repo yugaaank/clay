@@ -1,7 +1,7 @@
 mod counter;
 
 use counter::Counter;
-use gpui_framework::prelude::*;
+use clay::prelude::*;
 
 fn main() -> Result<(), SystemError> {
     App::new()

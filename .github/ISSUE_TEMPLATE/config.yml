@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Getting started and troubleshooting
+    url: https://github.com/yugaaank/clay/blob/main/docs/getting-started.md
+    about: Read the setup guide before opening an issue.
+  - name: Contribution guide
+    url: https://github.com/yugaaank/clay/blob/main/CONTRIBUTING.md
+    about: Learn how to propose, test, and submit changes.

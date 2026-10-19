@@ -1,93 +1,165 @@
-# GPUI Framework
+<p align="center">
+  <h1 align="center">Clay</h1>
+</p>
 
-A small Rust application framework built on GPUI. It removes routine application
-bootstrap and styling code while keeping an explicit escape hatch to the pinned
-GPUI APIs.
+<p align="center">
+  <a href="https://github.com/yugaaank/clay/actions/workflows/check.yml">
+    <img src="https://github.com/yugaaank/clay/actions/workflows/check.yml/badge.svg" alt="CI" />
+  </a>
+  <a href="https://github.com/yugaaank/clay/blob/main/LICENSE">
+    <img src="https://img.shields.io/github/license/yugaaank/clay" alt="License" />
+  </a>
+  <a href="https://github.com/yugaaank/clay/stargazers">
+    <img src="https://img.shields.io/github/stars/yugaaank/clay" alt="GitHub stars" />
+  </a>
+  <img src="https://img.shields.io/badge/rust-1.99.0%2B-orange" alt="Rust 1.99.0 or newer" />
+</p>
 
-This is an early Linux prototype. It is not a promise of Windows or macOS
-support; those targets need native builds and interaction checks before they can
-be advertised.
+<p align="center">
+  <a href="https://github.com/yugaaank/clay/blob/main/docs/getting-started.md">Documentation</a>
+  <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
+  <a href="https://github.com/yugaaank/clay/tree/main/examples">Examples</a>
+  <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
+  <a href="https://github.com/yugaaank/clay/issues">Issues</a>
+  <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
+  <a href="https://github.com/yugaaank/clay/blob/main/CONTRIBUTING.md">Contributing</a>
+  <br />
+</p>
 
-## What works
+<p align="center">
+  A small Rust application framework for building native desktop tools with GPUI.
+</p>
 
-- `App`, `Window`, `Column`, `Row`, `Container`, `Text`, `Button`, `Checkbox`,
-  and native single-line `TextInput`.
-- GPUI entity state, listeners, focus, keyboard traversal, clipboard, IME input,
-  accessible names/roles, and semantic light/dark theme tokens.
-- JSON settings persistence on the GPUI background executor.
-- Native file selection and confirmation dialogs where the host platform provides
-  them.
-- A CLI with `new`, `dev`, and `build`.
-- A complete settings example, a live system-monitor example, and a generated
-  counter template.
+<p align="center">
+  <a href="https://github.com/yugaaank/clay/blob/main/docs/getting-started.md"><strong>Read the docs →</strong></a>
+</p>
 
-## Quick start
+> **Status:** early Linux-focused prototype. Windows and macOS are not yet
+> native-tested or supported release targets. This project is best suited to
+> Rust developers building small native desktop tools.
 
-Requirements: Rust 1.99.0, a C/C++ toolchain, Linux GPUI graphics/windowing
-libraries, and a working graphical session. The first build downloads pinned
-GPUI and platform dependencies.
+## What is Clay?
 
-```sh
-cargo run --locked -p settings-app
-```
+Clay removes repetitive application bootstrap and common desktop UI
+plumbing while keeping an explicit escape hatch to pinned GPUI APIs. It provides
+application lifecycle, layouts, controls, themes, native services, and a CLI for
+generating standalone Rust applications.
 
-Run the system-monitor example:
+## What you can build today
 
-```sh
-cargo run --locked -p system-monitor
-```
+- Window and application lifecycle through `App` and `Window`.
+- Layout with `Column`, `Row`, and `Container`.
+- `Text`, `Button`, `Checkbox`, and native single-line `TextInput` controls.
+- Entity state, listeners, focus traversal, clipboard, Unicode editing, IME
+  composition, and basic accessibility metadata.
+- Semantic light/dark themes and spacing tokens.
+- JSON settings persistence, background executor tasks, file selection, and
+  confirmation dialogs.
+- Generated projects through `clay new` and locked `dev`/`build`
+  commands.
 
-It collects CPU, memory, uptime, and process data off the render path, keeps a
-bounded 60-sample history and 50-process view, and displays explicit loading,
-error, and empty states.
+The framework does not yet provide tables, virtualized lists, form validation,
+packaging, hot reload, plugins, or a TypeScript frontend.
 
-Build the CLI and create an app:
+## Choose your starting point
 
-```sh
-cargo build --locked -p gpui-framework-cli
-./target/debug/gpui-framework new ./my-app --framework-path "$PWD/crates/framework"
-cd my-app
-../target/debug/gpui-framework dev
-../target/debug/gpui-framework build
-```
+### Use the published CLI
 
-The `--framework-path` form is for unreleased development against this checkout.
-The generated app contains its own Cargo workspace and lockfile, and the CLI
-refuses to overwrite an existing path.
-
-For independent generation from the public release, install the CLI from the
-published tag and omit `--framework-path`:
+After the `v0.3.0` tag is available on GitHub, install the CLI and generate an
+independent application:
 
 ```sh
 cargo install --locked \
-  --git https://github.com/yugaaank/gpui-framework.git \
-  --tag v0.2.1 \
-  gpui-framework-cli \
-  --bin gpui-framework
-gpui-framework new ./my-app
+  --git https://github.com/yugaaank/clay.git \
+  --tag v0.3.0 \
+  clay-cli \
+  --bin clay
+
+clay --version
+clay new ./my-app
+cd my-app
+clay dev
 ```
 
-The default generated dependency is the public Git source at tag `v0.2.1`.
-That maintenance-release tag must be published before independent generation
-can resolve it; local paths are only for unreleased development.
+If GitHub reports that `v0.3.0` does not exist yet, use the repository checkout
+flow below or wait for the release tag to be published.
 
-Full setup, API examples, platform notes, and limitations are in
-[`docs/getting-started.md`](docs/getting-started.md).
+### Work from this repository
+
+Install the Linux prerequisites described in
+[`docs/getting-started.md`](docs/getting-started.md), then run an example:
+
+```sh
+cargo run --locked -p settings-app
+cargo run --locked -p system-monitor
+```
+
+To develop the CLI and framework together, use the explicit local dependency:
+
+```sh
+cargo build --locked -p clay-cli
+./target/debug/clay new ./my-app \
+  --framework-path "$PWD/crates/clay"
+cd my-app
+../target/debug/clay dev
+```
+
+The generated application is its own Cargo workspace and lockfile. The CLI will
+not overwrite an existing destination.
+
+## Learn the framework
+
+Start with [`docs/getting-started.md`](docs/getting-started.md). It covers
+installation, project generation, the public API, state updates, settings,
+background work, dialogs, testing, release builds, and troubleshooting.
+
+
+Agents building applications should use the task-oriented
+[`docs/ai/`](docs/ai/README.md) guides and the
+[`llms.txt`](llms.txt) index. Agents changing the framework should read
+[`AGENTS.md`](AGENTS.md).
+
+The two runnable examples are:
+
+- `examples/settings-app`: a persisted form with themes, clipboard, dialogs,
+  focus, and background settings I/O.
+- `examples/system-monitor`: background CPU, memory, uptime, and process
+  collection with bounded history and explicit loading/error/empty states.
+
+For advanced work, `clay::raw` exposes the pinned GPUI APIs for custom
+elements, painting, lower-level events, and GPUI tasks.
+
+## Contribute
+
+Read [`CONTRIBUTING.md`](CONTRIBUTING.md) before starting work. Begin with an
+issue labelled `good first issue` or `help wanted`, comment that you would like
+to take it, then fork the repository and open a focused pull request with tests
+and exact checks. Community behavior, support, and security reporting are
+documented in [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md), [`SUPPORT.md`](SUPPORT.md),
+and [`SECURITY.md`](SECURITY.md).
+
+The short-term priorities are reliable release/distribution workflows, Linux
+developer experience, real application examples, reusable collection/form
+patterns, and native platform validation. Hot reload, a TypeScript layer, visual
+editing, plugins, and an updater are intentionally deferred.
+
+Coding agents should read [`AGENTS.md`](AGENTS.md), the canonical engineering
+instructions for this repository.
 
 ## Workspace
 
 ```text
-crates/framework/       public facade and components
-crates/framework-cli/   project generation and Cargo commands
+crates/clay/             public facade and components
+crates/clay-cli/         project generation and Cargo commands
 examples/settings-app/  persisted settings example
 examples/system-monitor/ bounded live metrics and process example
 templates/minimal/      generated counter project
 docs/getting-started.md setup and API guide
+docs/ai/                application-agent guides and recipes
 ```
 
-`gpui_framework::raw` exposes GPUI for custom views, elements, painting, tasks,
-and platform-specific work. The facade does not link Zed's GPL `ui` crate; it
-uses the Apache-2.0 GPUI crates directly and defines its own semantic tokens.
+The facade does not link Zed's GPL `ui` crate. It uses the Apache-2.0 GPUI crates
+directly and defines its own semantic tokens.
 
 ## Verification
 
