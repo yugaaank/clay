@@ -38,7 +38,7 @@ fn binary_reports_help_version_and_argument_errors() {
         .expect("run new help");
     assert_success(&output);
     assert!(text(&output.stdout).contains("https://github.com/yugaaank/gpui-framework.git"));
-    assert!(text(&output.stdout).contains("v0.2.0"));
+    assert!(text(&output.stdout).contains("v0.2.1"));
     let output = cli().arg("--version").output().expect("run version");
     assert_success(&output);
     assert!(text(&output.stdout).starts_with("gpui-framework "));
@@ -196,7 +196,7 @@ fn new_resolves_lockfile_and_dev_build_forward_to_direct_cargo_children() {
     let public_manifest =
         fs::read_to_string(public_destination.join("Cargo.toml")).expect("public-source manifest");
     assert!(public_manifest.contains(
-        "gpui-framework = { git = \"https://github.com/yugaaank/gpui-framework.git\", tag = \"v0.2.0\" }"
+        "gpui-framework = { git = \"https://github.com/yugaaank/gpui-framework.git\", tag = \"v0.2.1\" }"
     ));
     assert!(!public_manifest.contains("path ="));
 

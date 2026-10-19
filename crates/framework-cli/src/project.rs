@@ -2,16 +2,14 @@ use std::fs::{self, OpenOptions};
 use std::io::{self, Write};
 use std::path::{Path, PathBuf};
 
-const MANIFEST: &str = include_str!("../../../templates/minimal/Cargo.toml");
+const MANIFEST: &str = include_str!("../../../templates/minimal/Cargo.toml.template");
 const README: &str = include_str!("../../../templates/minimal/README.md");
 const MAIN: &str = include_str!("../../../templates/minimal/src/main.rs");
 const COUNTER: &str = include_str!("../../../templates/minimal/src/counter.rs");
 const GITIGNORE: &str = include_str!("../../../templates/minimal/.gitignore");
 
 pub const PUBLIC_FRAMEWORK_REPOSITORY: &str = "https://github.com/yugaaank/gpui-framework.git";
-/// Release tag placeholder for the next prototype release. Publish/finalize this tag before
-/// relying on the default public-source mode for independent project generation.
-pub const PUBLIC_FRAMEWORK_TAG: &str = "v0.2.0";
+pub const PUBLIC_FRAMEWORK_TAG: &str = "v0.2.1";
 
 #[derive(Debug, PartialEq, Eq)]
 pub enum FrameworkSource {

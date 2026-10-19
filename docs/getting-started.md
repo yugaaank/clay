@@ -73,14 +73,18 @@ For independent generation, install the CLI from the published public release
 and omit `--framework-path`:
 
 ```sh
-cargo install --git https://github.com/yugaaank/gpui-framework.git --tag v0.2.0 --bin gpui-framework
+cargo install --locked \
+  --git https://github.com/yugaaank/gpui-framework.git \
+  --tag v0.2.1 \
+  gpui-framework-cli \
+  --bin gpui-framework
 gpui-framework new ./my-app
 ```
 
 The default generated `Cargo.toml` uses
-`https://github.com/yugaaank/gpui-framework.git` at tag `v0.2.0`. That tag is
-the Phase 1 release placeholder and must be published/finalized for independent
-generation to resolve. The local path mode is only for unreleased development.
+`https://github.com/yugaaank/gpui-framework.git` at tag `v0.2.1`. That
+maintenance-release tag must be published for independent generation to
+resolve. The local path mode is only for unreleased development.
 
 For a different local checkout:
 

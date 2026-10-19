@@ -11,14 +11,17 @@ GPUI. For independent project generation, install the CLI from the published
 framework release:
 
 ```sh
-cargo install --git https://github.com/yugaaank/gpui-framework.git --tag v0.2.0 --bin gpui-framework
+cargo install --locked \
+  --git https://github.com/yugaaank/gpui-framework.git \
+  --tag v0.2.1 \
+  gpui-framework-cli \
+  --bin gpui-framework
 gpui-framework new ./my-app
 ```
 
 By default, the generated `Cargo.toml` uses the public Git source at tag
-`v0.2.0`, so the tag must be published before this flow can resolve
-dependencies. The tag is the Phase 1 release placeholder and may be finalized
-by the project maintainer.
+`v0.2.1`, so the tag must be published before this flow can resolve
+dependencies. This is the maintenance release for the public Git workflow.
 
 For unreleased local framework development, generate with an explicit local
 override instead:

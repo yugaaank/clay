@@ -48,7 +48,7 @@ impl HelpTopic {
                  The destination must not exist. Its final component is the Rust package name\n\
                  (ASCII letters, digits, '-' or '_'; starts with a letter or '_'; no keywords).\n\
                  The default dependency is the public Git source at\n\
-                 https://github.com/yugaaank/gpui-framework.git, tag v0.2.0.\n\
+                 https://github.com/yugaaank/gpui-framework.git, tag v0.2.1.\n\
                  That release tag must be published for independent generation.\n\
                  Use --framework-path for an unreleased local framework crate containing Cargo.toml.\n\
                  Use `new -- <path>` for a path beginning with '-'.\n"

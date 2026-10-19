@@ -59,14 +59,17 @@ For independent generation from the public release, install the CLI from the
 published tag and omit `--framework-path`:
 
 ```sh
-cargo install --git https://github.com/yugaaank/gpui-framework.git --tag v0.2.0 --bin gpui-framework
+cargo install --locked \
+  --git https://github.com/yugaaank/gpui-framework.git \
+  --tag v0.2.1 \
+  gpui-framework-cli \
+  --bin gpui-framework
 gpui-framework new ./my-app
 ```
 
-The default generated dependency is the public Git source at tag `v0.2.0`.
-That tag is the Phase 1 release placeholder and must be published/finalized
-before independent generation can resolve it; local paths are only for
-unreleased development.
+The default generated dependency is the public Git source at tag `v0.2.1`.
+That maintenance-release tag must be published before independent generation
+can resolve it; local paths are only for unreleased development.
 
 Full setup, API examples, platform notes, and limitations are in
 [`docs/getting-started.md`](docs/getting-started.md).

@@ -1935,7 +1935,7 @@ dependencies = [
 
 [[package]]
 name = "gpui-framework"
-version = "0.2.0"
+version = "0.2.1"
 dependencies = [
  "gpui",
  "gpui_platform",
@@ -1947,7 +1947,7 @@ dependencies = [
 
 [[package]]
 name = "gpui-framework-cli"
-version = "0.2.0"
+version = "0.2.1"
 
 [[package]]
 name = "gpui_apple"
